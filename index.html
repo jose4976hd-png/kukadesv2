@@ -47,6 +47,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      flex-wrap: wrap;
     }
 
     .header-logo {
@@ -77,6 +78,33 @@
       margin-left: auto;
       font-size: 0.6rem;
       text-align: right;
+    }
+
+    .language-selector {
+      display: flex;
+      gap: 4px;
+      background: var(--bg2);
+      padding: 4px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--green-dim);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 16px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--green-dark);
+      color: var(--green);
+      border: 1px solid var(--green);
     }
 
     .status-dot {
@@ -432,17 +460,6 @@
       opacity: 1;
     }
 
-    /* Emergency Mode */
-    .emergency-mode .dash-level-value {
-      color: var(--red);
-      animation: pulse 0.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
     /* Confirm Dialog */
     .confirm-overlay {
       position: fixed;
@@ -508,19 +525,43 @@
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
+
+    @media (max-width: 600px) {
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-status {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
   </style>
 </head>
 <body>
 
 <!-- Header -->
 <div class="app-header">
-  <div class="header-logo">K</div>
-  <div>
-    <div class="header-title">KUKADES</div>
-    <div class="header-subtitle">PREPARADO PARA LO INESPERADO</div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div class="header-logo">K</div>
+    <div>
+      <div class="header-title" data-i18n="appName">KUKADES</div>
+      <div class="header-subtitle" data-i18n="subtitle">PREPARADO PARA LO INESPERADO</div>
+    </div>
   </div>
   <div class="header-status">
-    <span class="status-dot"></span> ACTIVO
+    <div><span class="status-dot"></span><span data-i18n="systemActive">SISTEMA ACTIVO</span></div>
+    <div class="language-selector">
+      <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+      <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+      <button class="lang-btn" onclick="setLanguage('de')">DE</button>
+      <button class="lang-btn" onclick="setLanguage('it')">IT</button>
+      <button class="lang-btn" onclick="setLanguage('pt')">PT</button>
+    </div>
   </div>
 </div>
 
@@ -529,7 +570,7 @@
   <!-- DASHBOARD -->
   <div class="screen active" id="screen-dashboard">
     <div class="section-header">
-      <div class="section-title">// ESTADO GENERAL</div>
+      <div class="section-title" data-i18n="dashboardTitle">// ESTADO GENERAL</div>
     </div>
 
     <div class="dash-level-card">
@@ -537,43 +578,43 @@
       <div class="dash-level-bar-wrap">
         <div class="dash-level-bar" id="dashBar"></div>
       </div>
-      <div id="dashStatus">EVALUANDO...</div>
+      <div id="dashStatus" data-i18n="evaluating">EVALUANDO...</div>
     </div>
 
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-value" id="statProducts">0</div>
-        <div class="stat-label">PRODUCTOS</div>
+        <div class="stat-label" data-i18n="products">PRODUCTOS</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="statExpired">0</div>
-        <div class="stat-label">CADUCADOS</div>
+        <div class="stat-label" data-i18n="expired">CADUCADOS</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="statMaterials">0</div>
-        <div class="stat-label">MATERIALES</div>
+        <div class="stat-label" data-i18n="materials">MATERIALES</div>
       </div>
     </div>
 
     <div class="section-header">
-      <div class="section-title">// MÓDULOS</div>
+      <div class="section-title" data-i18n="modulesTitle">// MÓDULOS</div>
     </div>
 
     <div style="display: grid; gap: 12px;">
       <button class="settings-block" onclick="showScreen('despensa')" style="text-align: left; cursor: pointer;">
         <div style="font-size: 1.2rem;">🥫</div>
-        <div style="font-weight: bold;">DESPENSA</div>
-        <div style="font-size: 0.6rem; color: var(--green-dim);">Gestión de alimentos y suministros</div>
+        <div style="font-weight: bold;" data-i18n="pantry">DESPENSA</div>
+        <div style="font-size: 0.6rem; color: var(--green-dim);" data-i18n="pantryDesc">Gestión de alimentos y suministros</div>
       </button>
       <button class="settings-block" onclick="showScreen('materiales')" style="text-align: left; cursor: pointer;">
         <div style="font-size: 1.2rem;">🔧</div>
-        <div style="font-weight: bold;">MATERIALES</div>
-        <div style="font-size: 0.6rem; color: var(--green-dim);">Herramientas y equipamiento</div>
+        <div style="font-weight: bold;" data-i18n="gear">MATERIALES</div>
+        <div style="font-size: 0.6rem; color: var(--green-dim);" data-i18n="gearDesc">Herramientas y equipamiento</div>
       </button>
       <button class="settings-block" onclick="showScreen('ajustes')" style="text-align: left; cursor: pointer;">
         <div style="font-size: 1.2rem;">⚙️</div>
-        <div style="font-weight: bold;">AJUSTES</div>
-        <div style="font-size: 0.6rem; color: var(--green-dim);">Configuración de la aplicación</div>
+        <div style="font-weight: bold;" data-i18n="settings">AJUSTES</div>
+        <div style="font-size: 0.6rem; color: var(--green-dim);" data-i18n="settingsDesc">Configuración de la aplicación</div>
       </button>
     </div>
   </div>
@@ -581,31 +622,31 @@
   <!-- DESPENSA -->
   <div class="screen" id="screen-despensa">
     <div class="section-header">
-      <div class="section-title">// DESPENSA</div>
+      <div class="section-title" data-i18n="pantryTitle">// DESPENSA</div>
       <div class="section-badge" id="despensaCount">0 items</div>
     </div>
 
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-value" id="despensaTotal">0</div>
-        <div class="stat-label">Total</div>
+        <div class="stat-label" data-i18n="total">Total</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="despensaWarn" style="color: var(--amber);">0</div>
-        <div class="stat-label">Aviso</div>
+        <div class="stat-label" data-i18n="warning">Aviso</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="despensaDanger" style="color: var(--red);">0</div>
-        <div class="stat-label">Urgente</div>
+        <div class="stat-label" data-i18n="urgent">Urgente</div>
       </div>
     </div>
 
     <div class="filter-tabs" id="productFilters">
-      <button class="filter-tab active" data-filter="all">TODOS</button>
-      <button class="filter-tab" data-filter="ALIMENTOS">🥫 ALIMENTOS</button>
-      <button class="filter-tab" data-filter="AGUA">💧 AGUA</button>
-      <button class="filter-tab" data-filter="MEDICINAS">💊 MEDICINAS</button>
-      <button class="filter-tab" data-filter="HIGIENE">🧼 HIGIENE</button>
+      <button class="filter-tab active" data-filter="all" data-i18n="all">TODOS</button>
+      <button class="filter-tab" data-filter="ALIMENTOS" data-i18n="food">🥫 ALIMENTOS</button>
+      <button class="filter-tab" data-filter="AGUA" data-i18n="water">💧 AGUA</button>
+      <button class="filter-tab" data-filter="MEDICINAS" data-i18n="medicines">💊 MEDICINAS</button>
+      <button class="filter-tab" data-filter="HIGIENE" data-i18n="hygiene">🧼 HIGIENE</button>
     </div>
 
     <div id="productList" class="product-list"></div>
@@ -614,15 +655,15 @@
   <!-- MATERIALES -->
   <div class="screen" id="screen-materiales">
     <div class="section-header">
-      <div class="section-title">// MATERIALES</div>
+      <div class="section-title" data-i18n="gearTitle">// MATERIALES</div>
       <div class="section-badge" id="materialesCount">0 items</div>
     </div>
 
     <div class="filter-tabs" id="materialFilters">
-      <button class="filter-tab active" data-filter="all">TODOS</button>
-      <button class="filter-tab" data-filter="ILUMINACIÓN">💡 ILUMINACIÓN</button>
-      <button class="filter-tab" data-filter="HERRAMIENTAS">🔧 HERRAMIENTAS</button>
-      <button class="filter-tab" data-filter="ENERGÍA">⚡ ENERGÍA</button>
+      <button class="filter-tab active" data-filter="all" data-i18n="all">TODOS</button>
+      <button class="filter-tab" data-filter="ILUMINACIÓN" data-i18n="lighting">💡 ILUMINACIÓN</button>
+      <button class="filter-tab" data-filter="HERRAMIENTAS" data-i18n="tools">🔧 HERRAMIENTAS</button>
+      <button class="filter-tab" data-filter="ENERGÍA" data-i18n="energy">⚡ ENERGÍA</button>
     </div>
 
     <div id="materialList" class="product-list"></div>
@@ -631,13 +672,13 @@
   <!-- AJUSTES -->
   <div class="screen" id="screen-ajustes">
     <div class="section-header">
-      <div class="section-title">// AJUSTES</div>
+      <div class="section-title" data-i18n="settingsTitle">// AJUSTES</div>
     </div>
 
     <div class="settings-block">
-      <div class="settings-block-title">👥 HOGAR</div>
+      <div class="settings-block-title" data-i18n="household">👥 HOGAR</div>
       <div class="field">
-        <label>NÚMERO DE PERSONAS</label>
+        <label data-i18n="peopleCount">NÚMERO DE PERSONAS</label>
         <div style="display: flex; gap: 10px; align-items: center;">
           <button onclick="changePersonCount(-1)" style="width: 44px; height: 44px; background: var(--green-dark); border: 1px solid var(--green); color: var(--green); font-size: 1.5rem; cursor: pointer;">−</button>
           <span id="personCount" style="font-family: var(--font-display); font-size: 1.5rem; width: 60px; text-align: center;">1</span>
@@ -647,27 +688,42 @@
     </div>
 
     <div class="settings-block">
-      <div class="settings-block-title">🔔 ALERTAS</div>
+      <div class="settings-block-title" data-i18n="alerts">🔔 ALERTAS</div>
       <div class="field">
-        <label>DÍAS DE ANTELACIÓN</label>
+        <label data-i18n="warningDays">DÍAS DE ANTELACIÓN</label>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button onclick="setWarnDays(30)" class="filter-tab" id="warn30">30 DÍAS</button>
-          <button onclick="setWarnDays(60)" class="filter-tab" id="warn60">60 DÍAS</button>
-          <button onclick="setWarnDays(90)" class="filter-tab" id="warn90">90 DÍAS</button>
+          <button onclick="setWarnDays(30)" class="filter-tab" id="warn30" data-i18n="days30">30 DÍAS</button>
+          <button onclick="setWarnDays(60)" class="filter-tab" id="warn60" data-i18n="days60">60 DÍAS</button>
+          <button onclick="setWarnDays(90)" class="filter-tab" id="warn90" data-i18n="days90">90 DÍAS</button>
         </div>
       </div>
     </div>
 
     <div class="settings-block">
-      <div class="settings-block-title">💾 DATOS</div>
-      <button class="btn btn-secondary" onclick="exportData()" style="width: 100%; margin-bottom: 8px;">📤 EXPORTAR DATOS</button>
+      <div class="settings-block-title" data-i18n="language">🌍 IDIOMA</div>
+      <div class="field">
+        <label data-i18n="selectLanguage">SELECCIONAR IDIOMA</label>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="setLanguage('es')" class="filter-tab" id="langEs">🇪🇸 Español</button>
+          <button onclick="setLanguage('en')" class="filter-tab" id="langEn">🇬🇧 English</button>
+          <button onclick="setLanguage('fr')" class="filter-tab" id="langFr">🇫🇷 Français</button>
+          <button onclick="setLanguage('de')" class="filter-tab" id="langDe">🇩🇪 Deutsch</button>
+          <button onclick="setLanguage('it')" class="filter-tab" id="langIt">🇮🇹 Italiano</button>
+          <button onclick="setLanguage('pt')" class="filter-tab" id="langPt">🇵🇹 Português</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-block">
+      <div class="settings-block-title" data-i18n="data">💾 DATOS</div>
+      <button class="btn btn-secondary" onclick="exportData()" style="width: 100%; margin-bottom: 8px;" data-i18n="exportData">📤 EXPORTAR DATOS</button>
       <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="width: 100%; margin-bottom: 8px;">📥 IMPORTAR DATOS</button>
-      <button class="btn btn-secondary" onclick="resetAllData()" style="width: 100%; background: rgba(255,34,34,0.1); border-color: var(--red); color: var(--red);">🗑️ RESTABLECER TODO</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="width: 100%; margin-bottom: 8px;" data-i18n="importData">📥 IMPORTAR DATOS</button>
+      <button class="btn btn-secondary" onclick="resetAllData()" style="width: 100%; background: rgba(255,34,34,0.1); border-color: var(--red); color: var(--red);" data-i18n="resetAll">🗑️ RESTABLECER TODO</button>
     </div>
 
     <div style="text-align: center; margin-top: 20px; font-size: 0.55rem; color: var(--green-dim);">
-      KUKADES v2.0 - Preparado para lo Inesperado
+      KUKADES v2.0 - <span data-i18n="prepared">Preparado para lo Inesperado</span>
     </div>
   </div>
 </div>
@@ -677,35 +733,35 @@
 
 <!-- Bottom Nav -->
 <nav class="bottom-nav">
-  <button class="nav-item active" onclick="showScreen('dashboard', this)">🏠 INICIO</button>
-  <button class="nav-item" onclick="showScreen('despensa', this)">🥫 DESPENSA</button>
-  <button class="nav-item" onclick="showScreen('materiales', this)">🔧 MATERIALES</button>
-  <button class="nav-item" onclick="showScreen('ajustes', this)">⚙️ AJUSTES</button>
+  <button class="nav-item active" onclick="showScreen('dashboard', this)" data-i18n="navHome">🏠 INICIO</button>
+  <button class="nav-item" onclick="showScreen('despensa', this)" data-i18n="navPantry">🥫 DESPENSA</button>
+  <button class="nav-item" onclick="showScreen('materiales', this)" data-i18n="navGear">🔧 MATERIALES</button>
+  <button class="nav-item" onclick="showScreen('ajustes', this)" data-i18n="navSettings">⚙️ AJUSTES</button>
 </nav>
 
 <!-- Modal Producto -->
 <div class="modal-overlay" id="productModal">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">AÑADIR PRODUCTO</div>
+    <div class="modal-title" id="modalTitle" data-i18n="addProduct">AÑADIR PRODUCTO</div>
     <div class="field">
-      <label>NOMBRE *</label>
+      <label data-i18n="name">NOMBRE *</label>
       <input type="text" id="productName" placeholder="Ej: Atún en aceite">
     </div>
     <div class="field">
-      <label>CATEGORÍA</label>
+      <label data-i18n="category">CATEGORÍA</label>
       <select id="productCat">
-        <option value="ALIMENTOS">🥫 ALIMENTOS</option>
-        <option value="AGUA">💧 AGUA</option>
-        <option value="MEDICINAS">💊 MEDICINAS</option>
-        <option value="HIGIENE">🧼 HIGIENE</option>
+        <option value="ALIMENTOS" data-i18n="food">🥫 ALIMENTOS</option>
+        <option value="AGUA" data-i18n="water">💧 AGUA</option>
+        <option value="MEDICINAS" data-i18n="medicines">💊 MEDICINAS</option>
+        <option value="HIGIENE" data-i18n="hygiene">🧼 HIGIENE</option>
       </select>
     </div>
     <div class="field">
-      <label>CANTIDAD</label>
+      <label data-i18n="quantity">CANTIDAD</label>
       <input type="number" id="productQty" placeholder="1" value="1">
     </div>
     <div class="field">
-      <label>UNIDAD</label>
+      <label data-i18n="unit">UNIDAD</label>
       <select id="productUnit">
         <option value="uds">uds</option>
         <option value="kg">kg</option>
@@ -714,16 +770,16 @@
       </select>
     </div>
     <div class="field">
-      <label>FECHA DE CADUCIDAD</label>
+      <label data-i18n="expiryDate">FECHA DE CADUCIDAD</label>
       <input type="date" id="productExp">
     </div>
     <div class="field">
-      <label>UBICACIÓN</label>
+      <label data-i18n="location">UBICACIÓN</label>
       <input type="text" id="productLoc" placeholder="Ej: Despensa, Trastero...">
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="closeModal()">CANCELAR</button>
-      <button class="btn btn-primary" onclick="saveProduct()">GUARDAR</button>
+      <button class="btn btn-secondary" onclick="closeModal()" data-i18n="cancel">CANCELAR</button>
+      <button class="btn btn-primary" onclick="saveProduct()" data-i18n="save">GUARDAR</button>
     </div>
   </div>
 </div>
@@ -731,38 +787,38 @@
 <!-- Modal Material -->
 <div class="modal-overlay" id="materialModal">
   <div class="modal">
-    <div class="modal-title" id="matModalTitle">AÑADIR MATERIAL</div>
+    <div class="modal-title" id="matModalTitle" data-i18n="addMaterial">AÑADIR MATERIAL</div>
     <div class="field">
-      <label>NOMBRE *</label>
+      <label data-i18n="name">NOMBRE *</label>
       <input type="text" id="materialName" placeholder="Ej: Linterna frontal">
     </div>
     <div class="field">
-      <label>CATEGORÍA</label>
+      <label data-i18n="category">CATEGORÍA</label>
       <select id="materialCat">
-        <option value="ILUMINACIÓN">💡 ILUMINACIÓN</option>
-        <option value="HERRAMIENTAS">🔧 HERRAMIENTAS</option>
-        <option value="ENERGÍA">⚡ ENERGÍA</option>
+        <option value="ILUMINACIÓN" data-i18n="lighting">💡 ILUMINACIÓN</option>
+        <option value="HERRAMIENTAS" data-i18n="tools">🔧 HERRAMIENTAS</option>
+        <option value="ENERGÍA" data-i18n="energy">⚡ ENERGÍA</option>
       </select>
     </div>
     <div class="field">
-      <label>ESTADO</label>
+      <label data-i18n="status">ESTADO</label>
       <select id="materialStatus">
-        <option value="OPERATIVO">✅ OPERATIVO</option>
-        <option value="REVISAR">⚠️ REVISAR</option>
-        <option value="AVERÍA">❌ AVERÍA</option>
+        <option value="OPERATIVO" data-i18n="operational">✅ OPERATIVO</option>
+        <option value="REVISAR" data-i18n="check">⚠️ REVISAR</option>
+        <option value="AVERÍA" data-i18n="broken">❌ AVERÍA</option>
       </select>
     </div>
     <div class="field">
-      <label>CANTIDAD</label>
+      <label data-i18n="quantity">CANTIDAD</label>
       <input type="number" id="materialQty" placeholder="1" value="1">
     </div>
     <div class="field">
-      <label>UBICACIÓN</label>
+      <label data-i18n="location">UBICACIÓN</label>
       <input type="text" id="materialLoc" placeholder="Ej: Caja herramientas">
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="closeMatModal()">CANCELAR</button>
-      <button class="btn btn-primary" onclick="saveMaterial()">GUARDAR</button>
+      <button class="btn btn-secondary" onclick="closeMatModal()" data-i18n="cancel">CANCELAR</button>
+      <button class="btn btn-primary" onclick="saveMaterial()" data-i18n="save">GUARDAR</button>
     </div>
   </div>
 </div>
@@ -770,11 +826,11 @@
 <!-- Confirm Dialog -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
-    <div class="modal-title" style="color: var(--red);">⚠ CONFIRMAR</div>
-    <div id="confirmText">¿Estás seguro?</div>
+    <div class="modal-title" style="color: var(--red);" data-i18n="confirm">⚠ CONFIRMAR</div>
+    <div id="confirmText" data-i18n="confirmMessage">¿Estás seguro?</div>
     <div class="btn-row" style="margin-top: 20px;">
-      <button class="btn btn-secondary" onclick="closeConfirm()">CANCELAR</button>
-      <button class="btn btn-primary" id="confirmBtn" onclick="executeConfirm()">ACEPTAR</button>
+      <button class="btn btn-secondary" onclick="closeConfirm()" data-i18n="cancel">CANCELAR</button>
+      <button class="btn btn-primary" id="confirmBtn" onclick="executeConfirm()" data-i18n="accept">ACEPTAR</button>
     </div>
   </div>
 </div>
@@ -783,6 +839,565 @@
 <div class="toast" id="toast">Mensaje</div>
 
 <script>
+  // ============ TRADUCCIONES - 6 IDIOMAS ============
+  const translations = {
+    es: {
+      appName: 'KUKADES',
+      subtitle: 'PREPARADO PARA LO INESPERADO',
+      systemActive: 'SISTEMA ACTIVO',
+      dashboardTitle: '// ESTADO GENERAL',
+      evaluating: 'EVALUANDO...',
+      products: 'PRODUCTOS',
+      expired: 'CADUCADOS',
+      materials: 'MATERIALES',
+      modulesTitle: '// MÓDULOS',
+      pantry: 'DESPENSA',
+      pantryDesc: 'Gestión de alimentos y suministros',
+      gear: 'MATERIALES',
+      gearDesc: 'Herramientas y equipamiento',
+      settings: 'AJUSTES',
+      settingsDesc: 'Configuración de la aplicación',
+      pantryTitle: '// DESPENSA',
+      total: 'Total',
+      warning: 'Aviso',
+      urgent: 'Urgente',
+      all: 'TODOS',
+      food: '🥫 ALIMENTOS',
+      water: '💧 AGUA',
+      medicines: '💊 MEDICINAS',
+      hygiene: '🧼 HIGIENE',
+      gearTitle: '// MATERIALES',
+      lighting: '💡 ILUMINACIÓN',
+      tools: '🔧 HERRAMIENTAS',
+      energy: '⚡ ENERGÍA',
+      settingsTitle: '// AJUSTES',
+      household: '👥 HOGAR',
+      peopleCount: 'NÚMERO DE PERSONAS',
+      alerts: '🔔 ALERTAS',
+      warningDays: 'DÍAS DE ANTELACIÓN',
+      days30: '30 DÍAS',
+      days60: '60 DÍAS',
+      days90: '90 DÍAS',
+      language: '🌍 IDIOMA',
+      selectLanguage: 'SELECCIONAR IDIOMA',
+      data: '💾 DATOS',
+      exportData: '📤 EXPORTAR DATOS',
+      importData: '📥 IMPORTAR DATOS',
+      resetAll: '🗑️ RESTABLECER TODO',
+      prepared: 'Preparado para lo Inesperado',
+      navHome: '🏠 INICIO',
+      navPantry: '🥫 DESPENSA',
+      navGear: '🔧 MATERIALES',
+      navSettings: '⚙️ AJUSTES',
+      addProduct: 'AÑADIR PRODUCTO',
+      addMaterial: 'AÑADIR MATERIAL',
+      name: 'NOMBRE *',
+      category: 'CATEGORÍA',
+      quantity: 'CANTIDAD',
+      unit: 'UNIDAD',
+      expiryDate: 'FECHA DE CADUCIDAD',
+      location: 'UBICACIÓN',
+      cancel: 'CANCELAR',
+      save: 'GUARDAR',
+      status: 'ESTADO',
+      operational: '✅ OPERATIVO',
+      check: '⚠️ REVISAR',
+      broken: '❌ AVERÍA',
+      confirm: '⚠ CONFIRMAR',
+      confirmMessage: '¿Estás seguro?',
+      accept: 'ACEPTAR',
+      optimal: '● ÓPTIMO',
+      stable: '◐ ESTABLE',
+      critical: '▼ CRÍTICO',
+      noProducts: '📦 No hay productos\nPresiona + para añadir',
+      noMaterials: '🔧 No hay materiales\nPresiona + para añadir',
+      productAdded: '✅ Producto añadido',
+      productUpdated: '✅ Producto actualizado',
+      productDeleted: '🗑️ Producto eliminado',
+      materialAdded: '✅ Material añadido',
+      materialUpdated: '✅ Material actualizado',
+      materialDeleted: '🗑️ Material eliminado',
+      dataExported: '📦 Datos exportados',
+      dataImported: '✅ Datos importados',
+      importError: '❌ Error al importar',
+      allDataDeleted: '🗑️ Todos los datos eliminados',
+      nameRequired: '⚠ Introduce un nombre',
+      personsUpdated: '✅ Personas: '
+    },
+    en: {
+      appName: 'KUKADES',
+      subtitle: 'READY FOR THE UNEXPECTED',
+      systemActive: 'SYSTEM ACTIVE',
+      dashboardTitle: '// GENERAL STATUS',
+      evaluating: 'EVALUATING...',
+      products: 'PRODUCTS',
+      expired: 'EXPIRED',
+      materials: 'GEAR',
+      modulesTitle: '// MODULES',
+      pantry: 'PANTRY',
+      pantryDesc: 'Food and supplies management',
+      gear: 'GEAR',
+      gearDesc: 'Tools and equipment',
+      settings: 'SETTINGS',
+      settingsDesc: 'Application configuration',
+      pantryTitle: '// PANTRY',
+      total: 'Total',
+      warning: 'Warning',
+      urgent: 'Urgent',
+      all: 'ALL',
+      food: '🥫 FOOD',
+      water: '💧 WATER',
+      medicines: '💊 MEDICINES',
+      hygiene: '🧼 HYGIENE',
+      gearTitle: '// GEAR',
+      lighting: '💡 LIGHTING',
+      tools: '🔧 TOOLS',
+      energy: '⚡ ENERGY',
+      settingsTitle: '// SETTINGS',
+      household: '👥 HOUSEHOLD',
+      peopleCount: 'NUMBER OF PEOPLE',
+      alerts: '🔔 ALERTS',
+      warningDays: 'ADVANCE NOTICE DAYS',
+      days30: '30 DAYS',
+      days60: '60 DAYS',
+      days90: '90 DAYS',
+      language: '🌍 LANGUAGE',
+      selectLanguage: 'SELECT LANGUAGE',
+      data: '💾 DATA',
+      exportData: '📤 EXPORT DATA',
+      importData: '📥 IMPORT DATA',
+      resetAll: '🗑️ RESET ALL',
+      prepared: 'Ready for the Unexpected',
+      navHome: '🏠 HOME',
+      navPantry: '🥫 PANTRY',
+      navGear: '🔧 GEAR',
+      navSettings: '⚙️ SETTINGS',
+      addProduct: 'ADD PRODUCT',
+      addMaterial: 'ADD GEAR',
+      name: 'NAME *',
+      category: 'CATEGORY',
+      quantity: 'QUANTITY',
+      unit: 'UNIT',
+      expiryDate: 'EXPIRY DATE',
+      location: 'LOCATION',
+      cancel: 'CANCEL',
+      save: 'SAVE',
+      status: 'STATUS',
+      operational: '✅ OPERATIONAL',
+      check: '⚠️ CHECK',
+      broken: '❌ BROKEN',
+      confirm: '⚠ CONFIRM',
+      confirmMessage: 'Are you sure?',
+      accept: 'ACCEPT',
+      optimal: '● OPTIMAL',
+      stable: '◐ STABLE',
+      critical: '▼ CRITICAL',
+      noProducts: '📦 No products\nPress + to add',
+      noMaterials: '🔧 No gear\nPress + to add',
+      productAdded: '✅ Product added',
+      productUpdated: '✅ Product updated',
+      productDeleted: '🗑️ Product deleted',
+      materialAdded: '✅ Gear added',
+      materialUpdated: '✅ Gear updated',
+      materialDeleted: '🗑️ Gear deleted',
+      dataExported: '📦 Data exported',
+      dataImported: '✅ Data imported',
+      importError: '❌ Import error',
+      allDataDeleted: '🗑️ All data deleted',
+      nameRequired: '⚠ Name required',
+      personsUpdated: '✅ People: '
+    },
+    fr: {
+      appName: 'KUKADES',
+      subtitle: 'PRÊT POUR L\'IMPREVU',
+      systemActive: 'SYSTÈME ACTIF',
+      dashboardTitle: '// ÉTAT GÉNÉRAL',
+      evaluating: 'ÉVALUATION...',
+      products: 'PRODUITS',
+      expired: 'EXPIRÉS',
+      materials: 'MATÉRIEL',
+      modulesTitle: '// MODULES',
+      pantry: 'GARDE-MANGER',
+      pantryDesc: 'Gestion des aliments et fournitures',
+      gear: 'MATÉRIEL',
+      gearDesc: 'Outils et équipement',
+      settings: 'PARAMÈTRES',
+      settingsDesc: 'Configuration de l\'application',
+      pantryTitle: '// GARDE-MANGER',
+      total: 'Total',
+      warning: 'Alerte',
+      urgent: 'Urgent',
+      all: 'TOUS',
+      food: '🥫 ALIMENTS',
+      water: '💧 EAU',
+      medicines: '💊 MÉDICAMENTS',
+      hygiene: '🧼 HYGIÈNE',
+      gearTitle: '// MATÉRIEL',
+      lighting: '💡 ÉCLAIRAGE',
+      tools: '🔧 OUTILS',
+      energy: '⚡ ÉNERGIE',
+      settingsTitle: '// PARAMÈTRES',
+      household: '👥 FOYER',
+      peopleCount: 'NOMBRE DE PERSONNES',
+      alerts: '🔔 ALERTES',
+      warningDays: 'JOURS D\'AVANCE',
+      days30: '30 JOURS',
+      days60: '60 JOURS',
+      days90: '90 JOURS',
+      language: '🌍 LANGUE',
+      selectLanguage: 'SÉLECTIONNER LA LANGUE',
+      data: '💾 DONNÉES',
+      exportData: '📤 EXPORTER',
+      importData: '📥 IMPORTER',
+      resetAll: '🗑️ TOUT RÉINITIALISER',
+      prepared: 'Prêt pour l\'imprévu',
+      navHome: '🏠 ACCUEIL',
+      navPantry: '🥫 GARDE-MANGER',
+      navGear: '🔧 MATÉRIEL',
+      navSettings: '⚙️ PARAMÈTRES',
+      addProduct: 'AJOUTER PRODUIT',
+      addMaterial: 'AJOUTER MATÉRIEL',
+      name: 'NOM *',
+      category: 'CATÉGORIE',
+      quantity: 'QUANTITÉ',
+      unit: 'UNITÉ',
+      expiryDate: 'DATE D\'EXPIRATION',
+      location: 'EMPLACEMENT',
+      cancel: 'ANNULER',
+      save: 'ENREGISTRER',
+      status: 'STATUT',
+      operational: '✅ OPÉRATIONNEL',
+      check: '⚠️ VÉRIFIER',
+      broken: '❌ EN PANNE',
+      confirm: '⚠ CONFIRMER',
+      confirmMessage: 'Êtes-vous sûr ?',
+      accept: 'ACCEPTER',
+      optimal: '● OPTIMAL',
+      stable: '◐ STABLE',
+      critical: '▼ CRITIQUE',
+      noProducts: '📦 Aucun produit\nAppuyez sur + pour ajouter',
+      noMaterials: '🔧 Aucun matériel\nAppuyez sur + pour ajouter',
+      productAdded: '✅ Produit ajouté',
+      productUpdated: '✅ Produit mis à jour',
+      productDeleted: '🗑️ Produit supprimé',
+      materialAdded: '✅ Matériel ajouté',
+      materialUpdated: '✅ Matériel mis à jour',
+      materialDeleted: '🗑️ Matériel supprimé',
+      dataExported: '📦 Données exportées',
+      dataImported: '✅ Données importées',
+      importError: '❌ Erreur d\'import',
+      allDataDeleted: '🗑️ Toutes les données supprimées',
+      nameRequired: '⚠ Nom requis',
+      personsUpdated: '✅ Personnes: '
+    },
+    de: {
+      appName: 'KUKADES',
+      subtitle: 'BEREIT FÜR DAS UNERWARTETE',
+      systemActive: 'SYSTEM AKTIV',
+      dashboardTitle: '// ALLGEMEINER STATUS',
+      evaluating: 'AUSWERTUNG...',
+      products: 'PRODUKTE',
+      expired: 'ABGELAUFEN',
+      materials: 'AUSRÜSTUNG',
+      modulesTitle: '// MODULE',
+      pantry: 'VORRAT',
+      pantryDesc: 'Lebensmittel- und Vorratsverwaltung',
+      gear: 'AUSRÜSTUNG',
+      gearDesc: 'Werkzeuge und Ausrüstung',
+      settings: 'EINSTELLUNGEN',
+      settingsDesc: 'Anwendungskonfiguration',
+      pantryTitle: '// VORRAT',
+      total: 'Gesamt',
+      warning: 'Warnung',
+      urgent: 'Dringend',
+      all: 'ALLE',
+      food: '🥫 LEBENSMITTEL',
+      water: '💧 WASSER',
+      medicines: '💊 MEDIKAMENTE',
+      hygiene: '🧼 HYGIENE',
+      gearTitle: '// AUSRÜSTUNG',
+      lighting: '💡 BELEUCHTUNG',
+      tools: '🔧 WERKZEUGE',
+      energy: '⚡ ENERGIE',
+      settingsTitle: '// EINSTELLUNGEN',
+      household: '👥 HAUSHALT',
+      peopleCount: 'ANZAHL PERSONEN',
+      alerts: '🔔 ALARME',
+      warningDays: 'VORWARNUNG TAGE',
+      days30: '30 TAGE',
+      days60: '60 TAGE',
+      days90: '90 TAGE',
+      language: '🌍 SPRACHE',
+      selectLanguage: 'SPRACHE AUSWÄHLEN',
+      data: '💾 DATEN',
+      exportData: '📤 EXPORTIEREN',
+      importData: '📥 IMPORTIEREN',
+      resetAll: '🗑️ ALLES ZURÜCKSETZEN',
+      prepared: 'Bereit für das Unerwartete',
+      navHome: '🏠 START',
+      navPantry: '🥫 VORRAT',
+      navGear: '🔧 AUSRÜSTUNG',
+      navSettings: '⚙️ EINSTELLUNGEN',
+      addProduct: 'PRODUKT HINZUFÜGEN',
+      addMaterial: 'AUSRÜSTUNG HINZUFÜGEN',
+      name: 'NAME *',
+      category: 'KATEGORIE',
+      quantity: 'MENGE',
+      unit: 'EINHEIT',
+      expiryDate: 'VERFALLSDATUM',
+      location: 'STANDORT',
+      cancel: 'ABBRECHEN',
+      save: 'SPEICHERN',
+      status: 'STATUS',
+      operational: '✅ FUNKTIONSFÄHIG',
+      check: '⚠️ PRÜFEN',
+      broken: '❌ DEFEKT',
+      confirm: '⚠ BESTÄTIGEN',
+      confirmMessage: 'Sind Sie sicher?',
+      accept: 'AKZEPTIEREN',
+      optimal: '● OPTIMAL',
+      stable: '◐ STABIL',
+      critical: '▼ KRITISCH',
+      noProducts: '📦 Keine Produkte\nDrücke + zum Hinzufügen',
+      noMaterials: '🔧 Keine Ausrüstung\nDrücke + zum Hinzufügen',
+      productAdded: '✅ Produkt hinzugefügt',
+      productUpdated: '✅ Produkt aktualisiert',
+      productDeleted: '🗑️ Produkt gelöscht',
+      materialAdded: '✅ Ausrüstung hinzugefügt',
+      materialUpdated: '✅ Ausrüstung aktualisiert',
+      materialDeleted: '🗑️ Ausrüstung gelöscht',
+      dataExported: '📦 Daten exportiert',
+      dataImported: '✅ Daten importiert',
+      importError: '❌ Importfehler',
+      allDataDeleted: '🗑️ Alle Daten gelöscht',
+      nameRequired: '⚠ Name erforderlich',
+      personsUpdated: '✅ Personen: '
+    },
+    it: {
+      appName: 'KUKADES',
+      subtitle: 'PRONTO PER L\'IMPREVISTO',
+      systemActive: 'SISTEMA ATTIVO',
+      dashboardTitle: '// STATO GENERALE',
+      evaluating: 'VALUTAZIONE...',
+      products: 'PRODOTTI',
+      expired: 'SCADUTI',
+      materials: 'ATTREZZATURA',
+      modulesTitle: '// MODULI',
+      pantry: 'DISPENSA',
+      pantryDesc: 'Gestione cibo e forniture',
+      gear: 'ATTREZZATURA',
+      gearDesc: 'Strumenti e equipaggiamento',
+      settings: 'IMPOSTAZIONI',
+      settingsDesc: 'Configurazione applicazione',
+      pantryTitle: '// DISPENSA',
+      total: 'Totale',
+      warning: 'Avviso',
+      urgent: 'Urgente',
+      all: 'TUTTI',
+      food: '🥫 CIBO',
+      water: '💧 ACQUA',
+      medicines: '💊 FARMACI',
+      hygiene: '🧼 IGIENE',
+      gearTitle: '// ATTREZZATURA',
+      lighting: '💡 ILLUMINAZIONE',
+      tools: '🔧 UTENSILI',
+      energy: '⚡ ENERGIA',
+      settingsTitle: '// IMPOSTAZIONI',
+      household: '👥 FAMIGLIA',
+      peopleCount: 'NUMERO PERSONE',
+      alerts: '🔔 ALLERTE',
+      warningDays: 'GIORNI DI PREAVVISO',
+      days30: '30 GIORNI',
+      days60: '60 GIORNI',
+      days90: '90 GIORNI',
+      language: '🌍 LINGUA',
+      selectLanguage: 'SELEZIONA LINGUA',
+      data: '💾 DATI',
+      exportData: '📤 ESPORTA DATI',
+      importData: '📥 IMPORTA DATI',
+      resetAll: '🗑️ RESETTA TUTTO',
+      prepared: 'Pronto per l\'imprevisto',
+      navHome: '🏠 HOME',
+      navPantry: '🥫 DISPENSA',
+      navGear: '🔧 ATTREZZATURA',
+      navSettings: '⚙️ IMPOSTAZIONI',
+      addProduct: 'AGGIUNGI PRODOTTO',
+      addMaterial: 'AGGIUNGI ATTREZZATURA',
+      name: 'NOME *',
+      category: 'CATEGORIA',
+      quantity: 'QUANTITÀ',
+      unit: 'UNITÀ',
+      expiryDate: 'DATA SCADENZA',
+      location: 'POSIZIONE',
+      cancel: 'ANNULLA',
+      save: 'SALVA',
+      status: 'STATO',
+      operational: '✅ OPERATIVO',
+      check: '⚠️ DA VERIFICARE',
+      broken: '❌ GUASTO',
+      confirm: '⚠ CONFERMA',
+      confirmMessage: 'Sei sicuro?',
+      accept: 'ACCETTA',
+      optimal: '● OTTIMALE',
+      stable: '◐ STABILE',
+      critical: '▼ CRITICO',
+      noProducts: '📦 Nessun prodotto\nPremi + per aggiungere',
+      noMaterials: '🔧 Nessuna attrezzatura\nPremi + per aggiungere',
+      productAdded: '✅ Prodotto aggiunto',
+      productUpdated: '✅ Prodotto aggiornato',
+      productDeleted: '🗑️ Prodotto eliminato',
+      materialAdded: '✅ Attrezzatura aggiunta',
+      materialUpdated: '✅ Attrezzatura aggiornata',
+      materialDeleted: '🗑️ Attrezzatura eliminata',
+      dataExported: '📦 Dati esportati',
+      dataImported: '✅ Dati importati',
+      importError: '❌ Errore importazione',
+      allDataDeleted: '🗑️ Tutti i dati eliminati',
+      nameRequired: '⚠ Nome richiesto',
+      personsUpdated: '✅ Persone: '
+    },
+    pt: {
+      appName: 'KUKADES',
+      subtitle: 'PRONTO PARA O INESPERADO',
+      systemActive: 'SISTEMA ATIVO',
+      dashboardTitle: '// ESTADO GERAL',
+      evaluating: 'AVALIANDO...',
+      products: 'PRODUTOS',
+      expired: 'EXPIRADOS',
+      materials: 'MATERIAIS',
+      modulesTitle: '// MÓDULOS',
+      pantry: 'DESPENSA',
+      pantryDesc: 'Gestão de alimentos e suprimentos',
+      gear: 'MATERIAIS',
+      gearDesc: 'Ferramentas e equipamentos',
+      settings: 'CONFIGURAÇÕES',
+      settingsDesc: 'Configuração da aplicação',
+      pantryTitle: '// DESPENSA',
+      total: 'Total',
+      warning: 'Aviso',
+      urgent: 'Urgente',
+      all: 'TODOS',
+      food: '🥫 ALIMENTOS',
+      water: '💧 ÁGUA',
+      medicines: '💊 MEDICAMENTOS',
+      hygiene: '🧼 HIGIENE',
+      gearTitle: '// MATERIAIS',
+      lighting: '💡 ILUMINAÇÃO',
+      tools: '🔧 FERRAMENTAS',
+      energy: '⚡ ENERGIA',
+      settingsTitle: '// CONFIGURAÇÕES',
+      household: '👥 FAMÍLIA',
+      peopleCount: 'NÚMERO DE PESSOAS',
+      alerts: '🔔 ALERTAS',
+      warningDays: 'DIAS DE ANTECEDÊNCIA',
+      days30: '30 DIAS',
+      days60: '60 DIAS',
+      days90: '90 DIAS',
+      language: '🌍 IDIOMA',
+      selectLanguage: 'SELECIONAR IDIOMA',
+      data: '💾 DADOS',
+      exportData: '📤 EXPORTAR DADOS',
+      importData: '📥 IMPORTAR DADOS',
+      resetAll: '🗑️ REINICIAR TUDO',
+      prepared: 'Pronto para o Inesperado',
+      navHome: '🏠 INÍCIO',
+      navPantry: '🥫 DESPENSA',
+      navGear: '🔧 MATERIAIS',
+      navSettings: '⚙️ CONFIGURAÇÕES',
+      addProduct: 'ADICIONAR PRODUTO',
+      addMaterial: 'ADICIONAR MATERIAL',
+      name: 'NOME *',
+      category: 'CATEGORIA',
+      quantity: 'QUANTIDADE',
+      unit: 'UNIDADE',
+      expiryDate: 'DATA DE VALIDADE',
+      location: 'LOCALIZAÇÃO',
+      cancel: 'CANCELAR',
+      save: 'SALVAR',
+      status: 'ESTADO',
+      operational: '✅ OPERACIONAL',
+      check: '⚠️ VERIFICAR',
+      broken: '❌ AVARIA',
+      confirm: '⚠ CONFIRMAR',
+      confirmMessage: 'Tem certeza?',
+      accept: 'ACEITAR',
+      optimal: '● ÓTIMO',
+      stable: '◐ ESTÁVEL',
+      critical: '▼ CRÍTICO',
+      noProducts: '📦 Sem produtos\nPressione + para adicionar',
+      noMaterials: '🔧 Sem materiais\nPressione + para adicionar',
+      productAdded: '✅ Produto adicionado',
+      productUpdated: '✅ Produto atualizado',
+      productDeleted: '🗑️ Produto removido',
+      materialAdded: '✅ Material adicionado',
+      materialUpdated: '✅ Material atualizado',
+      materialDeleted: '🗑️ Material removido',
+      dataExported: '📦 Dados exportados',
+      dataImported: '✅ Dados importados',
+      importError: '❌ Erro na importação',
+      allDataDeleted: '🗑️ Todos os dados removidos',
+      nameRequired: '⚠ Nome obrigatório',
+      personsUpdated: '✅ Pessoas: '
+    }
+  };
+
+  let currentLang = localStorage.getItem('kukades_lang') || 'es';
+
+  function t(key) {
+    return translations[currentLang]?.[key] || translations.es[key] || key;
+  }
+
+  function updateUILanguage() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key) el.textContent = t(key);
+    });
+    
+    document.querySelectorAll('option[data-i18n]').forEach(opt => {
+      const key = opt.getAttribute('data-i18n');
+      if (key) opt.textContent = t(key);
+    });
+    
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      const lang = btn.textContent.toLowerCase();
+      if (lang === currentLang) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+    
+    updateDashboardText();
+    updateEmptyStates();
+  }
+
+  function updateDashboardText() {
+    const level = parseInt(document.getElementById('dashLevel').innerText) || 0;
+    const statusEl = document.getElementById('dashStatus');
+    if (level >= 70) statusEl.innerHTML = t('optimal');
+    else if (level >= 40) statusEl.innerHTML = t('stable');
+    else statusEl.innerHTML = t('critical');
+  }
+
+  function updateEmptyStates() {
+    if (products.length === 0 && document.getElementById('productList')) {
+      const container = document.getElementById('productList');
+      if (container && container.innerHTML.includes('empty-state')) {
+        container.innerHTML = `<div class="empty-state">${t('noProducts').replace(/\n/g, '<br>')}</div>`;
+      }
+    }
+    if (materials.length === 0 && document.getElementById('materialList')) {
+      const container = document.getElementById('materialList');
+      if (container && container.innerHTML.includes('empty-state')) {
+        container.innerHTML = `<div class="empty-state">${t('noMaterials').replace(/\n/g, '<br>')}</div>`;
+      }
+    }
+  }
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('kukades_lang', lang);
+    updateUILanguage();
+    showToast(t('personsUpdated') + config.personCount);
+  }
+
   // ============ DATA ============
   let products = [];
   let materials = [];
@@ -823,6 +1438,7 @@
     if (savedConfig) config = JSON.parse(savedConfig);
     
     updateAll();
+    updateUILanguage();
   }
   
   function saveProducts() {
@@ -858,13 +1474,13 @@
   }
   
   function formatExpDate(expDate) {
-    if (!expDate) return 'Sin fecha';
+    if (!expDate) return t('noDate') || 'Sin fecha';
     const exp = new Date(expDate);
     const today = new Date();
     const diff = Math.floor((exp - today) / (1000 * 60 * 60 * 24));
-    if (diff < 0) return `⛔ CADUCÓ el ${exp.toLocaleDateString()}`;
-    if (diff === 0) return `🔴 CADUCA HOY`;
-    if (diff <= config.warnDays) return `⚠️ Caduca en ${diff} días (${exp.toLocaleDateString()})`;
+    if (diff < 0) return `⛔ ${t('expiredOn') || 'CADUCÓ el'} ${exp.toLocaleDateString()}`;
+    if (diff === 0) return `🔴 ${t('expiresToday') || 'CADUCA HOY'}`;
+    if (diff <= config.warnDays) return `⚠️ ${t('expiresIn') || 'Caduca en'} ${diff} ${t('days') || 'días'} (${exp.toLocaleDateString()})`;
     return `🟢 ${exp.toLocaleDateString()}`;
   }
   
@@ -897,10 +1513,11 @@
     
     document.getElementById('dashLevel').innerText = score + '%';
     document.getElementById('dashBar').style.width = score + '%';
-    document.getElementById('dashStatus').innerText = score >= 70 ? '● ÓPTIMO' : (score >= 40 ? '◐ ESTABLE' : '▼ CRÍTICO');
     document.getElementById('statProducts').innerText = totalProducts;
     document.getElementById('statExpired').innerText = expired;
     document.getElementById('statMaterials').innerText = totalMaterials;
+    
+    updateDashboardText();
   }
   
   function renderProducts() {
@@ -911,11 +1528,11 @@
     document.getElementById('despensaTotal').innerText = products.length;
     document.getElementById('despensaWarn').innerText = warn;
     document.getElementById('despensaDanger').innerText = danger;
-    document.getElementById('despensaCount').innerText = filtered.length + ' items';
+    document.getElementById('despensaCount').innerText = filtered.length + ' ' + (t('items') || 'items');
     
     const container = document.getElementById('productList');
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="empty-state">📦 No hay productos<br>Presiona + para añadir</div>`;
+      container.innerHTML = `<div class="empty-state">${t('noProducts').replace(/\n/g, '<br>')}</div>`;
       return;
     }
     
@@ -941,11 +1558,11 @@
   
   function renderMaterials() {
     let filtered = currentMatFilter === 'all' ? materials : materials.filter(m => m.cat === currentMatFilter);
-    document.getElementById('materialesCount').innerText = filtered.length + ' items';
+    document.getElementById('materialesCount').innerText = filtered.length + ' ' + (t('items') || 'items');
     
     const container = document.getElementById('materialList');
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="empty-state">🔧 No hay materiales<br>Presiona + para añadir</div>`;
+      container.innerHTML = `<div class="empty-state">${t('noMaterials').replace(/\n/g, '<br>')}</div>`;
       return;
     }
     
@@ -979,7 +1596,7 @@
   function openAddModal() {
     if (document.getElementById('screen-despensa').classList.contains('active')) {
       editingProductId = null;
-      document.getElementById('modalTitle').innerText = 'AÑADIR PRODUCTO';
+      document.getElementById('modalTitle').innerHTML = t('addProduct');
       document.getElementById('productName').value = '';
       document.getElementById('productCat').value = 'ALIMENTOS';
       document.getElementById('productQty').value = '1';
@@ -989,7 +1606,7 @@
       document.getElementById('productModal').classList.add('open');
     } else if (document.getElementById('screen-materiales').classList.contains('active')) {
       editingMaterialId = null;
-      document.getElementById('matModalTitle').innerText = 'AÑADIR MATERIAL';
+      document.getElementById('matModalTitle').innerHTML = t('addMaterial');
       document.getElementById('materialName').value = '';
       document.getElementById('materialCat').value = 'ILUMINACIÓN';
       document.getElementById('materialStatus').value = 'OPERATIVO';
@@ -1001,7 +1618,7 @@
   
   function saveProduct() {
     const name = document.getElementById('productName').value.trim();
-    if (!name) { showToast('⚠ Introduce un nombre', true); return; }
+    if (!name) { showToast(t('nameRequired'), true); return; }
     
     const product = {
       id: editingProductId || Date.now(),
@@ -1016,10 +1633,10 @@
     if (editingProductId) {
       const index = products.findIndex(p => p.id === editingProductId);
       if (index !== -1) products[index] = product;
-      showToast('✅ Producto actualizado');
+      showToast(t('productUpdated'));
     } else {
       products.push(product);
-      showToast('✅ Producto añadido');
+      showToast(t('productAdded'));
     }
     
     saveProducts();
@@ -1032,7 +1649,7 @@
     const product = products.find(p => p.id === id);
     if (!product) return;
     editingProductId = id;
-    document.getElementById('modalTitle').innerText = 'EDITAR PRODUCTO';
+    document.getElementById('modalTitle').innerHTML = t('addProduct');
     document.getElementById('productName').value = product.name;
     document.getElementById('productCat').value = product.cat;
     document.getElementById('productQty').value = product.qty;
@@ -1048,16 +1665,16 @@
       saveProducts();
       renderProducts();
       updateDashboard();
-      showToast('🗑️ Producto eliminado');
+      showToast(t('productDeleted'));
     };
-    document.getElementById('confirmText').innerHTML = '¿Eliminar este producto?';
+    document.getElementById('confirmText').innerHTML = t('confirmMessage');
     document.getElementById('confirmOverlay').classList.add('open');
   }
   
   // ============ MATERIAL CRUD ============
   function saveMaterial() {
     const name = document.getElementById('materialName').value.trim();
-    if (!name) { showToast('⚠ Introduce un nombre', true); return; }
+    if (!name) { showToast(t('nameRequired'), true); return; }
     
     const material = {
       id: editingMaterialId || Date.now(),
@@ -1071,10 +1688,10 @@
     if (editingMaterialId) {
       const index = materials.findIndex(m => m.id === editingMaterialId);
       if (index !== -1) materials[index] = material;
-      showToast('✅ Material actualizado');
+      showToast(t('materialUpdated'));
     } else {
       materials.push(material);
-      showToast('✅ Material añadido');
+      showToast(t('materialAdded'));
     }
     
     saveMaterials();
@@ -1087,7 +1704,7 @@
     const material = materials.find(m => m.id === id);
     if (!material) return;
     editingMaterialId = id;
-    document.getElementById('matModalTitle').innerText = 'EDITAR MATERIAL';
+    document.getElementById('matModalTitle').innerHTML = t('addMaterial');
     document.getElementById('materialName').value = material.name;
     document.getElementById('materialCat').value = material.cat;
     document.getElementById('materialStatus').value = material.status;
@@ -1102,9 +1719,9 @@
       saveMaterials();
       renderMaterials();
       updateDashboard();
-      showToast('🗑️ Material eliminado');
+      showToast(t('materialDeleted'));
     };
-    document.getElementById('confirmText').innerHTML = '¿Eliminar este material?';
+    document.getElementById('confirmText').innerHTML = t('confirmMessage');
     document.getElementById('confirmOverlay').classList.add('open');
   }
   
@@ -1126,7 +1743,7 @@
     document.getElementById('personCount').innerText = config.personCount;
     saveConfig();
     updateDashboard();
-    showToast(`✅ Personas: ${config.personCount}`);
+    showToast(t('personsUpdated') + config.personCount);
   }
   
   function setWarnDays(days) {
@@ -1134,7 +1751,7 @@
     saveConfig();
     updateWarnButtons();
     renderProducts();
-    showToast(`✅ Alertas configuradas a ${days} días`);
+    showToast(t('warningDays') + ': ' + days + ' ' + (t('days') || 'días'));
   }
   
   function exportData() {
@@ -1151,7 +1768,7 @@
     a.download = `kukades-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('📦 Datos exportados');
+    showToast(t('dataExported'));
   }
   
   function importData(event) {
@@ -1168,9 +1785,9 @@
         saveMaterials();
         saveConfig();
         updateAll();
-        showToast('✅ Datos importados');
+        showToast(t('dataImported'));
       } catch(err) {
-        showToast('❌ Error al importar', true);
+        showToast(t('importError'), true);
       }
     };
     reader.readAsText(file);
@@ -1186,9 +1803,9 @@
       saveMaterials();
       saveConfig();
       updateAll();
-      showToast('🗑️ Todos los datos eliminados');
+      showToast(t('allDataDeleted'));
     };
-    document.getElementById('confirmText').innerHTML = '⚠️ Esto ELIMINARÁ TODOS tus datos. ¿Estás seguro?';
+    document.getElementById('confirmText').innerHTML = t('confirmMessage');
     document.getElementById('confirmOverlay').classList.add('open');
   }
 
@@ -1207,7 +1824,6 @@
       fab.style.display = 'none';
     }
     
-    // Update filters when showing despensa/materiales
     if (screen === 'despensa') renderProducts();
     if (screen === 'materiales') renderMaterials();
   }
@@ -1265,6 +1881,7 @@
   window.exportData = exportData;
   window.importData = importData;
   window.resetAllData = resetAllData;
+  window.setLanguage = setLanguage;
 </script>
 </body>
 </html>
